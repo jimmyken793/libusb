@@ -35,14 +35,20 @@ STATIC_SOURCESDIR          = COMPILE_HOME + 'sources'
 # LIBUSB_TARBALL            = STATIC_SOURCESDIR + "libusb-#{LIBUSB_VERSION}.tar.bz2"
 
 # Fetch tarball from libusbx
-LIBUSB_VERSION            = ENV['LIBUSB_VERSION'] || '1.0.17'
-LIBUSB_SOURCE_URI         = URI( "http://downloads.sourceforge.net/project/libusbx/releases/#{LIBUSB_VERSION[/^\d+\.\d+\.\d+/]}/source/libusbx-#{LIBUSB_VERSION}.tar.bz2" )
-LIBUSB_TARBALL            = STATIC_SOURCESDIR + File.basename( LIBUSB_SOURCE_URI.path )
+# LIBUSB_VERSION            = ENV['LIBUSB_VERSION'] || '1.0.17-rc1'
+# LIBUSB_SOURCE_URI         = URI( "http://downloads.sourceforge.net/project/libusbx/releases/#{LIBUSB_VERSION[/^\d+\.\d+\.\d+/]}/source/libusbx-#{LIBUSB_VERSION}.tar.bz2" )
+# LIBUSB_TARBALL            = STATIC_SOURCESDIR + File.basename( LIBUSB_SOURCE_URI.path )
 
 # Fetch tarball from Pete Batard's git repo
 # LIBUSB_VERSION            = ENV['LIBUSB_VERSION'] || '4cc72d0'
 # LIBUSB_SOURCE_URI         = URI( "http://git.libusb.org/?p=libusb-pbatard.git;a=snapshot;h=#{LIBUSB_VERSION};sf=tbz2" )
 # LIBUSB_TARBALL            = STATIC_SOURCESDIR + "libusb-pbatard-#{LIBUSB_VERSION}.tar.bz2"
+
+# Fetch tarball from libusbx GitHub repo
+LIBUSB_VERSION            = ENV['LIBUSB_VERSION'] || '850dc391cfc6e3f7e8cf917f8baf646ae7ca83a1'
+LIBUSB_SOURCE_URI         = URI( "https://github.com/libusbx/libusbx/archive/#{LIBUSB_VERSION}.tar.gz" )
+LIBUSB_TARBALL            = STATIC_SOURCESDIR + "libusbx-#{LIBUSB_VERSION}.tar.bz2"
+
 
 EXT_BUILDDIR              = Pathname( "./ext" ).expand_path
 EXT_LIBUSB_BUILDDIR       = EXT_BUILDDIR + LIBUSB_TARBALL.basename(".tar.bz2")
@@ -54,7 +60,7 @@ file LIBUSB_TARBALL => STATIC_SOURCESDIR do |t|
   # download the source file using wget or curl
   chdir File.dirname(t.name) do
     url = LIBUSB_SOURCE_URI
-    sh "wget '#{url}' -O #{LIBUSB_TARBALL}"
+    sh "wget --no-check-certificate '#{url}' -O #{LIBUSB_TARBALL}"
   end
 end
 
